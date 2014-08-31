@@ -157,7 +157,7 @@ public class ForecastFragment extends Fragment {
                 }
                 forecastJsonStr = buffer.toString();
             } catch (IOException e) {
-                Log.e(LOG_TAG, "Error ", e);
+                Log.e(LOG_TAG, "Error - IO Exception ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
                 // to parse it.
                 forecastJsonStr = null;
@@ -187,6 +187,7 @@ public class ForecastFragment extends Fragment {
             } else {
                 String[] nullForecast = new String[1];
                 nullForecast[0] = "The Weather is Unavailable";
+                Log.v(LOG_TAG, "The JSON string is null");
                 return nullForecast;
             }
             return null;
@@ -273,8 +274,14 @@ public class ForecastFragment extends Fragment {
                 JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
                 double high = temperatureObject.getDouble(OWM_MAX);
                 double low = temperatureObject.getDouble(OWM_MIN);
-
-                highAndLow = formatHighLows(high, low);
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
+                        (getActivity().getApplicationContext());
+                String unitValue = prefs.getString(getString(R.string.pref_unit_key), "0");
+                if (unitValue.equals("1")){
+                    double farHigh = (((high*9)/5)+32);
+                    double farLow = (((low*9)/5)+32);
+                    highAndLow = formatHighLows(farHigh, farLow);
+                }else highAndLow = formatHighLows(high, low);
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
 

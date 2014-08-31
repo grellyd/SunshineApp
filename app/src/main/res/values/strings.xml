@@ -15,7 +15,11 @@
     <string name="pref_location_title" translateable="true">Location</string>
 
     <string name="pref_unit_label">unit</string>
-    <string name="pref_unit_key" translatabel="false">unit</string>
+    <string name="pref_unit_key">unit</string>
     <string name="pref_unit_title" translateable="true">Units</string>
+    <string name="pref_metric_name">Metric</string>
+    <string name="pref_imperial_name">Imperial</string>
+    <string name="pref_unit_default_value">0</string>
 
+    <string name="share_action_title">Share</string>
 </resources>

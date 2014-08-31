@@ -1,8 +1,12 @@
 package com.example.graham.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -39,6 +43,18 @@ public class MainActivity extends ActionBarActivity {
             Intent launchSettings = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(launchSettings);
             return true;
+        }
+        if (id == R.id.action_map){
+            Intent launchMap = new Intent(Intent.ACTION_VIEW);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String location = prefs.getString(getString(R.string.pref_location_key), "Vancouver,CA");
+            Uri uriLocation = Uri.parse("geo:0,0").buildUpon()
+                    .encodedQuery(location)
+                    .build();
+            launchMap.setData(uriLocation);
+            if (launchMap.resolveActivity(getPackageManager()) != null){
+                startActivity(launchMap);
+            } else Log.v("Launch Map", "No app");
         }
 
         return super.onOptionsItemSelected(item);

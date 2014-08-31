@@ -3,7 +3,10 @@ package com.example.graham.sunshine.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,8 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+//import android.widget.ShareActionProvider;
+
 
 public class DetailActivity extends ActionBarActivity {
+
+    ShareActionProvider mShareActionProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,10 @@ public class DetailActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.detail_activity, menu);
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        mShareActionProvider = new ShareActionProvider(getApplicationContext());
+        ShareActionProvider newShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+        mShareActionProvider = newShareActionProvider;
         return true;
     }
 
@@ -43,6 +54,17 @@ public class DetailActivity extends ActionBarActivity {
             Intent launchSettings = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(launchSettings);
             return true;
+        }
+        if (id == R.id.action_share){
+            Intent launchShare = new Intent(Intent.ACTION_SEND);
+            String shareString = "";
+            if (getIntent().hasExtra(Intent.EXTRA_TEXT)){
+                shareString = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+                shareString = shareString + " #Sunshine";
+                launchShare.putExtra(Intent.EXTRA_TEXT, shareString);
+                mShareActionProvider.setShareIntent(launchShare);
+            } else Log.v("Share", "No Extras");
+
         }
         return super.onOptionsItemSelected(item);
     }
