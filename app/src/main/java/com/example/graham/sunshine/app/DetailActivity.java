@@ -60,6 +60,7 @@ public class DetailActivity extends ActionBarActivity {
                 shareString = shareString + " #Sunshine";
                 launchShare.putExtra(Intent.EXTRA_TEXT, shareString);
                 mShareActionProvider.setShareIntent(launchShare);
+                Log.v("Share", shareString);
             } else Log.v("Share", "No Extras");
 
         }
